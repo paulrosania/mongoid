@@ -9,9 +9,9 @@ module Mongoid #:nodoc
       include ActiveModel::Naming
       include ActiveModel::Serialization
       include ActiveModel::Serializers::JSON
+      include ActiveModel::Serializers::Xml
       include Mongoid::Associations
       include Mongoid::Attributes
-      include Mongoid::Callbacks
       include Mongoid::Collections
       include Mongoid::Dirty
       include Mongoid::Extras
@@ -24,6 +24,7 @@ module Mongoid #:nodoc
       include Mongoid::Persistence
       include Mongoid::State
       include Mongoid::Validations
+      include Mongoid::Callbacks
       extend ActiveModel::Translation
       extend Mongoid::Finders
       extend Mongoid::NamedScope
