@@ -75,6 +75,16 @@ module Mongoid #:nodoc:
       access = name.to_s
       modify(access, @attributes.delete(name.to_s), nil)
     end
+    
+    # Returns true when attribute is present.
+    #
+    # Options:
+    #
+    # name: The name of the attribute to request presence on.
+    def attribute_present?(name)
+      value = read_attribute(name)
+      !value.blank?
+    end
 
     # Returns the object type. This corresponds to the name of the class that
     # this +Document+ is, which is used in determining the class to

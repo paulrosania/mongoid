@@ -11,11 +11,13 @@ module Mongoid #:nodoc
       include ActiveModel::Serializers::JSON
       include ActiveModel::Serializers::Xml
       include Mongoid::Associations
+      include Mongoid::Atomicity
       include Mongoid::Attributes
       include Mongoid::Collections
       include Mongoid::Dirty
       include Mongoid::Extras
       include Mongoid::Fields
+      include Mongoid::Hierarchy
       include Mongoid::Indexes
       include Mongoid::Matchers
       include Mongoid::Memoization
