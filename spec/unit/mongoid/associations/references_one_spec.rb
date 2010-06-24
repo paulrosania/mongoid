@@ -114,7 +114,7 @@ describe Mongoid::Associations::ReferencesOne do
 
     it "delegates to new" do
       Mongoid::Associations::ReferencesOne.expects(:new).with(document, options, nil)
-      Mongoid::Associations::ReferencesOne.instantiate(document, options)
+      Mongoid::Associations::ReferencesOne.new(document, options)
     end
 
   end
@@ -126,10 +126,10 @@ describe Mongoid::Associations::ReferencesOne do
       @game = stub
     end
 
-    it "delegates to the documet" do
+    it "delegates to the document" do
       Game.expects(:first).with(:conditions => { "person_id"=> @person.id }).returns(@game)
       @game.expects(:strange_method)
-      association = Mongoid::Associations::ReferencesOne.instantiate(@person, options)
+      association = Mongoid::Associations::ReferencesOne.new(@person, options)
       association.strange_method
     end
 
@@ -166,17 +166,17 @@ describe Mongoid::Associations::ReferencesOne do
 
   end
 
-  describe "#nil?" do
+  describe "association value" do
 
     before do
       @person = Person.new
-      @game = stub
+      @game = Game.new
       Game.expects(:first).with(:conditions => { "person_id"=> @person.id }).returns(nil)
     end
 
     it "delegates to the document" do
-      association = Mongoid::Associations::ReferencesOne.instantiate(@person, options)
-      association.should be_nil
+      association = Mongoid::Associations::ReferencesOne.new(@person, options)
+      association.should == nil
     end
 
   end
@@ -185,7 +185,7 @@ describe Mongoid::Associations::ReferencesOne do
 
     before do
       @person = Person.new
-      @game = stub
+      @game = Game.new
     end
 
     it "sets the parent on the child association" do

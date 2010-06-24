@@ -14,10 +14,15 @@ module Mongoid #:nodoc:
       #
       # Options:
       #
-      # target: The parent +Document+
+      # document: The child +Document+
       # options: The association options
-      def initialize(target, options)
-        @target, @options = target, options
+      def initialize(document, options, target = nil)
+        if target
+          document.parentize(target, determine_name(target, options))
+          document.notify
+        end
+
+        @target, @options = document._parent, options
         extends(options)
       end
 
@@ -28,20 +33,14 @@ module Mongoid #:nodoc:
         @target
       end
 
-      class << self
-        # Creates the new association by setting the internal
-        # document as the passed in Document. This should be the
-        # parent.
-        #
-        # Options:
-        #
-        # document: The parent +Document+
-        # options: The association options
-        def instantiate(document, options)
-          target = document._parent
-          target.nil? ? nil : new(target, options)
-        end
+      protected
+      def determine_name(target, options)
+        inverse = options.inverse_of
+        return inverse unless inverse.is_a?(Array)
+        inverse.detect { |name| target.respond_to?(name) }
+      end
 
+      class << self
         # Returns the macro used to create the association.
         def macro
           :embedded_in
@@ -55,16 +54,7 @@ module Mongoid #:nodoc:
         #
         # A new +EmbeddedIn+ association proxy.
         def update(target, child, options)
-          child.parentize(target, determine_name(target, options))
-          child.notify
-          instantiate(child, options)
-        end
-
-        protected
-        def determine_name(target, options)
-          inverse = options.inverse_of
-          return inverse unless inverse.is_a?(Array)
-          inverse.detect { |name| target.respond_to?(name) }
+          new(child, options, target)
         end
       end
     end
