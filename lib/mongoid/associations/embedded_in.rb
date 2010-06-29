@@ -18,8 +18,10 @@ module Mongoid #:nodoc:
       # options: The association options
       def initialize(document, options, target = nil)
         if target
-          document.parentize(target, determine_name(target, options))
+          inverse = determine_name(target, options)
+          document.parentize(target, inverse)
           document.notify
+          target.unmemoize(inverse)
         end
 
         @target, @options = document._parent, options

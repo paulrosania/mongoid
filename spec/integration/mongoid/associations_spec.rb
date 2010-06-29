@@ -72,7 +72,30 @@ describe Mongoid::Associations do
 
     it "sets the reverse association after save" do
       @from_db = Game.find(@game.id)
-      @game.person.should == @person
+      @from_db.person.should == @person
+    end
+  end
+
+  context "passing a relational parent to the child constructor" do
+
+    before do
+      @person = Person.create(:title => "Sir")
+      @game = Game.new(:score => 1, :person => @person)
+      @game.save
+    end
+
+    it "sets the association on save" do
+      @from_db = Game.find(@game.id)
+      @from_db.person.should == @person
+    end
+
+    it "sets the reverse association before save" do
+      @person.game.should == @game
+    end
+
+    it "sets the reverse association after save" do
+      @from_db = Person.find(@person.id)
+      @from_db.game.should == @game
     end
   end
 

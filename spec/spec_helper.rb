@@ -11,7 +11,7 @@ gem "mocha", ">= 0.9.8"
 require "mongoid"
 require "mocha"
 require "rspec"
-
+require 'ruby-debug';Debugger.start
 Mongoid.configure do |config|
   name = "mongoid_test"
   host = "localhost"
